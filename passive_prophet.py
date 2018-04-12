@@ -8,11 +8,11 @@ from fbprophet import Prophet
 # csv = '/Users/stuartillson/passive_capture_py/bon_passage_data.csv'
 # spp = 'chinook_adult'
 
-def run_forecast(csv, spp, num_of_days=30, return_count=False):
-  df = create_dataframe(csv, spp)
+def run_forecast(csv, spp, num_of_days=30, display_count=False):
+  df = create_dataframe(csv, spp, display_count)
   predict_passage(df,num_of_days)
 
-def create_dataframe(csv, spp):
+def create_dataframe(csv, spp, display_count):
   print('Formatting the dataframe')
   df = pd.read_csv(csv)
 
@@ -30,7 +30,7 @@ def create_dataframe(csv, spp):
   df['ds'] = df['index']
 
   # flag return values to be either counts, or the log of the counts
-  if return_count:
+  if display_count:
     df['y'] = df[f"{spp}"]
   else:
     df['y'] = np.log(df[f"{spp}"])

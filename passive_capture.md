@@ -70,6 +70,18 @@ year_month
 
 Use either ARIMA or Prophet for time series analysis on each time series data. Then use Multivariate Regression Analysis
 
+why to take the log of the counts:
+
+The variances in any given samples may differ significantly. 
+
+In log-log regression model it is the interpretation of estimated parameter, say αi as the elasticity of Y(t) on Xi(t)
+
+In error-correction models we have an empirically stronger assumption that proportions are more stable (stationary) than the absolute differences.
+
+It is easy to aggregate the log-returns over time.
+
+If you still want a statistical criterion for when to do log transformation a simple solution would be any test for heteroscedasticity. In the case of increasing variance I would recommend Goldfeld-Quandt Test or similar to it. In R it is located in library(lmtest) and is denoted by gqtest(y~1) function. Simply regress on intercept term if you don't have any regression model, y is your dependent variable. 
+
 
 ## Prophet
 

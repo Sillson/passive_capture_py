@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.gis import admin as geo_model_admin
 from .models import Forecasts
 from .models import Dam
 from .models import Species
@@ -14,8 +15,8 @@ class SpeciesAdmin(admin.ModelAdmin):
 
 admin.site.register(Species, SpeciesAdmin)
 
-class DamAdmin(admin.ModelAdmin):
+class DamAdmin(geo_model_admin.OSMGeoAdmin):
   list_display = ('name', 'abbr', 'location')
 
-admin.site.register(Dam, DamAdmin)
+geo_model_admin.site.register(Dam, DamAdmin)
 
