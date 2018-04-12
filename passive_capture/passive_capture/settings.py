@@ -80,6 +80,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'passive_capture_py',
+        'USER': '',
+        'HOST': 'localhost',
+        'PASSWORD': '',
+        'PORT': '5432',
     }
 }
 
