@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,13 +9,28 @@ from fbprophet import Prophet
 # csv = '/Users/stuartillson/passive_capture_py/bon_passage_data.csv'
 # spp = 'chinook_adult'
 
+def run_all_forecasts(spp, num_of_days=30):
+  for csv in passage_csvs():
+    run_forecast_and_save(csv, spp, num_of_days)
+
+def run_forecast_and_save(csv, spp, num_of_days=30, display_count=False):
+  df = create_dataframe(csv, spp, display_count)
+  predict_passage_and_save(df['dataframe'],df['dam'],num_of_days)
+
+def passage_csvs():
+  files = [os.path.abspath(f"csv/passage_data/{x}") for x in os.listdir('csv/passage_data')]
+  return files
+
 def run_forecast(csv, spp, num_of_days=30, display_count=False):
   df = create_dataframe(csv, spp, display_count)
-  predict_passage(df,num_of_days)
+  predict_passage(df['dataframe'],num_of_days)
 
-def create_dataframe(csv, spp, display_count):
+def create_dataframe(csv, spp, display_count=False):
   print('Formatting the dataframe')
   df = pd.read_csv(csv)
+
+  # isolate the dam
+  dam_name = df['dam'][0]
 
   # select columns to remove to isolate a spp
   cols_to_remove = [col for col in df.columns if f"{spp}" not in col and 'count_date' not in col]
@@ -39,7 +55,17 @@ def create_dataframe(csv, spp, display_count):
 
   df = df.drop(['index', f"{spp}"], axis=1)
 
-  return df
+  return {'dataframe': df, 'dam': dam_name}
+
+def predict_passage_and_save(df,dam,num_of_days):
+  print('Forecasting the future')
+  m = Prophet()
+  m.fit(df);
+  future = m.make_future_dataframe(periods=num_of_days)
+  forecast = m.predict(future)
+  grf = m.plot(forecast)
+  grf.savefig(f"charts/{dam}_forecast.png")
+  forecast.to_csv(f"csv/forecasts/{dam}_forecast.csv")
 
 def predict_passage(df,num_of_days):
   print('Forecasting the future')

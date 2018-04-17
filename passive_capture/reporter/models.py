@@ -6,6 +6,7 @@ class Dam(models.Model):
   name = models.CharField(max_length = 20)
   abbr = models.CharField(max_length = 5)
   location = models.PointField(srid=4326)
+  # deprecated
   objects = GeoManager()
 
 class Species(models.Model):
