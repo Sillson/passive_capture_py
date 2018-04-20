@@ -8,14 +8,14 @@
 <h3>how it works</h3>
   <p>Using a time-series forecast model, passive capture predicts anadramous fish passage through the Columbia River, as tracked by counts supplied by the USACE
 
-  <p><strong>Dams:</strong></p>
+  <p><strong>Dams Supported:</strong></p>
   <ul>
     {% for dam in dams %}
       <li><strong>Dam:</strong> {{ dam.name }}</li>
     {% endfor %}
   </ul>
 
-  <p><strong>Species:</strong></p>
+  <p><strong>Species Supported:</strong></p>
   <ul>
     {% for spp in species %}
       <li><strong>Species:</strong> {{ spp.name }}</li>

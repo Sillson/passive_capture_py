@@ -9,6 +9,9 @@ def index(request):
     
     return render(request, 'index.html', context={'dams':dams, 'species':species})
 
+def about(request):
+    return render(request, 'about.html', context={})
+
 def view_dam(request, id):
     try:
         dam = Dam.objects.get(id=id)
@@ -24,6 +27,13 @@ def view_species(request, id):
         raise Http404("Species does not exist")
  
     return render(request, 'species.html', context={'species': species})
+
+def forecasts_index(request):
+    try:
+        forecasts = Forecasts.objects.all()
+    except Forecasts.objects.all().count() == 0:
+        raise Http404("No Forecasts Found")
+    return render(request, 'forecasts.html', context={'forecasts': forecasts})
 
 def view_forecasts(request, id):
     try:

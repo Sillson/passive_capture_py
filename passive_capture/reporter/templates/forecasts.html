@@ -1,0 +1,27 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<h1>Forecasts</h1>
+
+<h3>Current Forecasts:</h3>
+  {% for forecast in forecasts %}
+  <container>
+    <div>
+      <p>Forecast for <strong>{{ forecast.species.name }}</strong> at dam site <strong>{{ forecast.dam.name }}</strong> with a forecast range to {{ forecast.forecast_range }}</p>
+    </div>
+  </container>
+  <container>
+    {% load static %}
+    <div>
+      <img id='' src="{% static 'images/forecasts/BON_chinook_adult_forecast.png' %}" alt="boneville chinook forecast" style="width:800px;"/>
+    </div>
+<!--     <div>
+      <button id='enlargebutton' class="btn btn-info enlarge-button">enlarge</button>
+    </div> -->
+  </container>
+  {% endfor %}
+
+
+<p> Here's will information on the forecasts will go </p>
+
+{% endblock %}
