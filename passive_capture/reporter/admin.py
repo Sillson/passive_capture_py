@@ -1,12 +1,11 @@
 from django.contrib import admin
 from django.contrib.gis import admin as geo_model_admin
-from .models import Forecasts
-from .models import Dam
-from .models import Species
+from leaflet.admin import LeafletGeoAdmin
+from .models import Forecasts, Dam, Species
 
 # Forecast Model
 class ForecastsAdmin(admin.ModelAdmin):
-  list_display = ('dam', 'species')
+  list_display = ('dam', 'species', 'forecast_range')
 
 admin.site.register(Forecasts, ForecastsAdmin)
 
@@ -17,8 +16,8 @@ class SpeciesAdmin(admin.ModelAdmin):
 admin.site.register(Species, SpeciesAdmin)
 
 # Dam Model - requires GeoAdmin privelages
-class DamAdmin(geo_model_admin.OSMGeoAdmin):
+class DamAdmin(LeafletGeoAdmin):
   list_display = ('name', 'abbr', 'location')
 
-geo_model_admin.site.register(Dam, DamAdmin)
+admin.site.register(Dam, DamAdmin)
 

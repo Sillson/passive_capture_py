@@ -94,3 +94,9 @@ replace -inf with 0
 http://www.fpc.org/documents/metadata/FPC_Adult_Metadata.html
 
 These are the times we consider 'bonus'
+
+## QGIS
+
+- QGIS 3.0 has some issues it seems
+- Create shapefile with inverse polygon of the basin
+- 

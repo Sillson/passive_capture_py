@@ -1,0 +1,38 @@
+{% extends "base_template.html" %}
+
+{% block content %}
+<h1>passive capture</h1>
+
+  <p>An exploratory GeoDjango application to forecast select anadramous fish runs on the Columbia River</p>
+
+<h3>how it works</h3>
+  <p>Using a time-series forecast model, passive capture predicts anadramous fish passage through the Columbia River, as tracked by counts supplied by the USACE
+
+  <p><strong>Dams:</strong></p>
+  <ul>
+    {% for dam in dams %}
+      <li><strong>Dam:</strong> {{ dam.name }}</li>
+    {% endfor %}
+  </ul>
+
+  <p><strong>Species:</strong></p>
+  <ul>
+    {% for spp in species %}
+      <li><strong>Species:</strong> {{ spp.name }}</li>
+    {% endfor %}
+  </ul>
+
+
+
+{% load static %}
+
+<container>
+  <div>
+    <img id='toggleimage' src="{% static 'images/forecasts/BON_chinook_adult_forecast.png' %}" alt="boneville chinook forecast" style="width:200px;"/>
+  </div>
+  <div>
+    <button id='enlargebutton' class="btn btn-info enlarge-button">enlarge</button>
+  </div>
+</container>
+
+{% endblock %}

@@ -4,18 +4,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 from fbprophet import Prophet
 
-# Example
-# exec(open('/Users/stuartillson/passive_capture_py/passive_prophet.py').read())
+# exec(open('/Users/stuartillson/passive_capture_py/forecast_generator.py').read())
 # csv = '/Users/stuartillson/passive_capture_py/bon_passage_data.csv'
 # spp = 'chinook_adult'
+
+def run_all_forecasts(spp, num_of_days=30):
+  for csv in passage_csvs():
+    run_forecast(csv, spp, num_of_days)
+
+def run_forecast(csv, spp, num_of_days=30, display_count=False):
+  df_opts = create_dataframe(csv, spp, display_count)
+  predict_passage(df_opts['dataframe'],df_opts['dam'],df_opts['spp'],num_of_days)
 
 def passage_csvs():
   files = [os.path.abspath(f"csv/passage_data/{x}") for x in os.listdir('csv/passage_data')]
   return files
-
-def run_forecast(csv, spp, num_of_days=30, display_count=False):
-  df = create_dataframe(csv, spp, display_count)
-  predict_passage(df['dataframe'],num_of_days)
 
 def create_dataframe(csv, spp, display_count=False):
   print('Formatting the dataframe')
@@ -47,16 +50,18 @@ def create_dataframe(csv, spp, display_count=False):
 
   df = df.drop(['index', f"{spp}"], axis=1)
 
-  return {'dataframe': df, 'dam': dam_name}
+  return {'dataframe': df, 'dam': dam_name, 'spp': spp}
 
-def predict_passage(df,num_of_days):
+def predict_passage(df,dam,spp,num_of_days):
   print('Forecasting the future')
   m = Prophet()
   m.fit(df);
   future = m.make_future_dataframe(periods=num_of_days)
   forecast = m.predict(future)
-  m.plot(forecast)
-  plt.show()
+  grf = m.plot(forecast)
+  grf.savefig(f"charts/{dam}_{spp}_forecast.png")
+  forecast.to_csv(f"csv/forecasts/{dam}_{spp}_forecast.csv")
+
 
 
 

@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
+    'django_extensions',
     'reporter',
     'world',
+    'leaflet'
 ]
 
 MIDDLEWARE = [
@@ -57,7 +59,7 @@ ROOT_URLCONF = 'passive_capture.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'), os.path.join(BASE_DIR, 'static')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,3 +127,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (46,-121),
+    'DEFAULT_ZOOM': 8,
+    'MIN_ZOOM': 3,
+    'MAX_ZOOM': 18,
+    'SCALE': 'imperial',
+    'ATTRIBUTION_PREFIX': 'passive_capture'
+}
+
+# # Configure Django App for Heroku.
+# import django_heroku
+# django_heroku.settings(locals())
