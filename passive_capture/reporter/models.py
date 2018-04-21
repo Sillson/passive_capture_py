@@ -40,10 +40,10 @@ class Forecasts(models.Model):
     verbose_name_plural = "Forecasts"
 
   def graph_path(self):
-    return f"../static/images/forecasts/{self.dam.abbr}_{self.species.reference_name}_forecast.png"
+    return f"{self.dam.abbr}_{self.species.reference_name}_forecast.png"
 
   def forecast_csv_path(self):
-    return f"../static/csv/forecasts/{self.dam.abbr}_{self.species.reference_name}_forecast.csv"
+    return f"{self.dam.abbr}_{self.species.reference_name}_forecast.csv"
 
 
 

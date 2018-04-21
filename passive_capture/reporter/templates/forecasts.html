@@ -13,11 +13,8 @@
   <container>
     {% load static %}
     <div>
-      <img id='' src="{% static 'images/forecasts/BON_chinook_adult_forecast.png' %}" alt="boneville chinook forecast" style="width:800px;"/>
+      <img id='' src="{% static 'images/forecasts/' %}{{forecast.graph_path}}" alt="boneville chinook forecast" style="width:800px;"/>
     </div>
-<!--     <div>
-      <button id='enlargebutton' class="btn btn-info enlarge-button">enlarge</button>
-    </div> -->
   </container>
   {% endfor %}
 

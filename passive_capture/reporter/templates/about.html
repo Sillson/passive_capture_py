@@ -19,7 +19,7 @@
       </ul>
     <h2>setup</h2>
       <p>Below are my notes taken during the devleopment of this application</p>
-      <p>I've taken a crack at fish passage modeling before, <em>(call it a hobby)</em>, and felt that using the US Army Core of Engineers (USACE) fish passage data for the Columbia River would be the most familiar and applicable for this project. The Fish Passage Center (fpc.org) provides a great interface to collect this data, and I've developed APIs in both Ruby and R to scrape this data.</p>
+      <p>I've taken a crack at fish passage modeling before, <em>(call it a hobby)</em>, and felt that using the US Army Core of Engineers (USACE) fish passage data for the Columbia River would be the most familiar and applicable for this project. The Fish Passage Center (fpc.org/http://www.fpc.org/documents/metadata/FPC_Adult_Metadata.html) provides a great interface to collect this data, and I've developed APIs in both Ruby and R to scrape this data.</p>
       <p>I wanted to work with a static set of data initially, as it would require less API overhead than to keep and API up and running to ETL the FPC data on a schedule</p>
       <p>First Steps:
         <ul>
@@ -61,85 +61,49 @@
           <li>Historical (3yr) water-year snow/water equivalent standard deviation</li>
         </ul>
       </p>
-
-
+      <p> NOAA Data was extracted from public datasets -- metdata came from https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/readme.txt</p>
+      <p>Example for snow data grouped by year month:
+        <code>
+          SELECT
+            CONCAT(
+              CAST(EXTRACT(YEAR FROM date) AS STRING), 
+              CAST(EXTRACT(MONTH FROM date) AS STRING)
+            ) AS year_month,
+            stations.name,
+            stations.latitude,
+            stations.longitude,
+            weather.id,
+            weather.element,
+            SUM(weather.value) AS snow_total,
+            AVG(DISTINCT weather.value) AS snow_average,
+            MIN(weather.value) AS snow_min,
+            MAX(weather.value) AS snow_max
+          FROM
+            `bigquery-public-data.ghcn_d.ghcnd_stations` AS stations
+            JOIN `bigquery-public-data.ghcn_d.ghcnd_201*` AS weather
+            ON weather.id = stations.id
+          WHERE
+            stations.latitude > 43
+            AND stations.latitude < 49
+            AND stations.longitude > -123
+            AND stations.longitude < -120
+            AND element = 'SNWD'
+          GROUP BY
+            year_month,
+            stations.name,
+            stations.latitude,
+            stations.longitude,
+            weather.id,
+            weather.element
+          ORDER BY
+          year_month
+        </code>
+      </p>
+      <h2>statistical notes</h2>
+      <p>At present moment, there are 2 models I would like to pursue with this project. The first is a composite model between ARIMA and Prophet utilizing seasonality per distinct andaramous fish run and weather and flow features as autoregessors. The second would be ARIMA/Prophet time series analysis on 
+      each individual feature including run counts, flow, dissolved gas, precipitation etc -- and then compose a multivariate regression model using the predicted future values that may/may not contribute to run counts.</p>
+      <p>I'm taking the log of the run counts because the variance in any given sample over the time series differs significantly. In log-log regression model it is the interpretation of estimated parameter, say αi as the elasticity of Y(t) on Xi(t). In error-correction models we have an empirically stronger assumption that proportions are more stable (stationary) than the absolute differences. It is easier to aggregate the log-returns over time.</p>
+      <p>If you still want a statistical criterion for when to do log transformation a simple solution would be any test for heteroscedasticity. In the case of increasing variance I would recommend Goldfeld-Quandt Test or similar to it. In R it is located in library(lmtest) and is denoted by gqtest(y~1) function. Simply regress on intercept term if you don't have any regression model, y is your dependent variable. </p>
   </div>
 </container>
-
-
-## Aggregate weather data from NOAA: https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/readme.txt
-
-
-## Example for snow data grouped by year month
-```
-SELECT
-  CONCAT(
-    CAST(EXTRACT(YEAR FROM date) AS STRING), 
-    CAST(EXTRACT(MONTH FROM date) AS STRING)
-  ) AS year_month,
-  stations.name,
-  stations.latitude,
-  stations.longitude,
-  weather.id,
-  weather.element,
-  SUM(weather.value) AS snow_total,
-  AVG(DISTINCT weather.value) AS snow_average,
-  MIN(weather.value) AS snow_min,
-  MAX(weather.value) AS snow_max
-FROM
-  `bigquery-public-data.ghcn_d.ghcnd_stations` AS stations
-  JOIN `bigquery-public-data.ghcn_d.ghcnd_201*` AS weather
-  ON weather.id = stations.id
-WHERE
-  stations.latitude > 43
-  AND stations.latitude < 49
-  AND stations.longitude > -123
-  AND stations.longitude < -120
-  AND element = 'SNWD'
-GROUP BY
-  year_month,
-  stations.name,
-  stations.latitude,
-  stations.longitude,
-  weather.id,
-  weather.element
-ORDER BY
-year_month
-```
-
-## Conversation with Martin
-
-
-Use either ARIMA or Prophet for time series analysis on each time series data. Then use Multivariate Regression Analysis
-
-why to take the log of the counts:
-
-The variances in any given samples may differ significantly. 
-
-In log-log regression model it is the interpretation of estimated parameter, say αi as the elasticity of Y(t) on Xi(t)
-
-In error-correction models we have an empirically stronger assumption that proportions are more stable (stationary) than the absolute differences.
-
-It is easy to aggregate the log-returns over time.
-
-If you still want a statistical criterion for when to do log transformation a simple solution would be any test for heteroscedasticity. In the case of increasing variance I would recommend Goldfeld-Quandt Test or similar to it. In R it is located in library(lmtest) and is denoted by gqtest(y~1) function. Simply regress on intercept term if you don't have any regression model, y is your dependent variable. 
-
-
-## Prophet
-
-capture time series data and log of one species at a time
-replace nulls with 0's
-replace -inf with 0
-
-## Add holidays to Prophet data
-
-http://www.fpc.org/documents/metadata/FPC_Adult_Metadata.html
-
-These are the times we consider 'bonus'
-
-## QGIS
-
-- QGIS 3.0 has some issues it seems
-- Create shapefile with inverse polygon of the basin
-- 
 {% endblock %}
