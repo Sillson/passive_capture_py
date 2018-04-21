@@ -6,7 +6,8 @@ from celery import Celery
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'passive_capture.settings')
 
 app = Celery('passive_capture')
-
+app.conf.broker_url = 'redis://localhost:6379/0'
+app.conf.broker_transport_options = {'visibility_timeout': 3600}
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
 # - namespace='CELERY' means all celery-related configuration keys

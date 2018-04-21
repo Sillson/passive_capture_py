@@ -23,9 +23,6 @@ class Species(models.Model):
   def __str__(self):
     return self.name
 
-  def hux(self, blarg='fins'):
-    return f"{self.name} is a really neat fish with {blarg}"
-
 class Forecasts(models.Model):
   species = models.ForeignKey(Species, on_delete=False)
   dam = models.ForeignKey(Dam, on_delete=False)
