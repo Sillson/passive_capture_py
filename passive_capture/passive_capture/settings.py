@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'reporter',
     'world',
     'celery',
-    'leaflet'
+    'leaflet',
+    'folium'
 ]
 
 MIDDLEWARE = [

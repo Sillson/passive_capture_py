@@ -1,12 +1,11 @@
 import os
+from fbprophet import Prophet
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from fbprophet import Prophet
 
-# exec(open('/Users/stuartillson/passive_capture_py/forecast_generator.py').read())
-# csv = '/Users/stuartillson/passive_capture_py/bon_passage_data.csv'
-# spp = 'chinook_adult'
+def add_stf(x,y):
+  return(x+y)
 
 def run_all_forecasts(spp, num_of_days=30):
   for csv in passage_csvs():

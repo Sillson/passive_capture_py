@@ -3,3 +3,8 @@
     padding: 0;
     list-style: none;
 }
+
+.includedMap {
+  width:1000px;
+  height:1000px;
+}

@@ -11,14 +11,14 @@
   <p><strong>Dams Supported:</strong></p>
   <ul>
     {% for dam in dams %}
-      <li><strong>Dam:</strong> {{ dam.name }}</li>
+      <li><strong>Dam:</strong> <a href="/dams/{{ dam.id }}/">{{ dam.name }}</a></li>
     {% endfor %}
   </ul>
 
   <p><strong>Species Supported:</strong></p>
   <ul>
     {% for spp in species %}
-      <li><strong>Species:</strong> {{ spp.name }}</li>
+      <li><strong>Species:</strong> <a href="/dams/{{ species.id }}/">{{ spp.name }}</a></li>
     {% endfor %}
   </ul>
 

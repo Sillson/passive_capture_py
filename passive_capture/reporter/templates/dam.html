@@ -5,4 +5,14 @@
 
 <p> Here's will information on the Dam will go </p>
 
+{% load static %}
+ <div id="includedContent" class='includedMap'></div> 
+
+ <script>
+  $(function(){
+    $("#includedContent").load("{% static 'maps/'%}{{dam.map_path}}");
+  });
+ </script>
+
+
 {% endblock %}
